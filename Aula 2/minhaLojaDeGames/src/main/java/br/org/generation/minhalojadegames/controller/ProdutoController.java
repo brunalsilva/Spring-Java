@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.org.generation.minhalojadegames.model.CategoriaModel;
 import br.org.generation.minhalojadegames.model.ProdutoModel;
+import br.org.generation.minhalojadegames.repository.CategoriaRepository;
 import br.org.generation.minhalojadegames.repository.ProdutoRepository;
 
 @RestController
@@ -28,6 +29,9 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 	
 	@GetMapping
 	public ResponseEntity <List<ProdutoModel>> getAll()
@@ -58,7 +62,12 @@ public class ProdutoController {
 	@PostMapping
 	public ResponseEntity <ProdutoModel> postProduto (@Valid @RequestBody ProdutoModel produto)
 	{
-		return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
+		categoriaRepository.findAll();
+		if (categoriaRepository.existsById(produto.getCategoria().getId())) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}   
 	}
 	
 	@PutMapping
