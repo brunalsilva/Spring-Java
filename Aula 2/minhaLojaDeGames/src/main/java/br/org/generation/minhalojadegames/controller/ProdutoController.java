@@ -64,7 +64,7 @@ public class ProdutoController {
 	{
 		if (categoriaRepository.existsById(produto.getCategoria().getId()))
 			return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
-		 else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
 	@PutMapping
